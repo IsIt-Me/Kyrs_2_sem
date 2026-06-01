@@ -21,6 +21,7 @@ function RoomDetailPage() {
     const [checkOut, setCheckOut] = useState('');
     const [rating, setRating] = useState(5);
     const [reviewText, setReviewText] = useState('');
+    const [notification, setNotification] = useState(null);
 
     const roomQuery = useQuery({
         queryKey: ['room', roomId],
@@ -48,6 +49,15 @@ function RoomDetailPage() {
 
                     return [message.review, ...oldReviews];
                 });
+
+                setNotification({
+                    title: 'Новый отзыв',
+                    text: `${message.review.username} оставил отзыв ${message.review.rating}/5`,
+                });
+
+                window.setTimeout(() => {
+                    setNotification(null);
+                }, 4500);
             }
         };
 
@@ -249,6 +259,12 @@ function RoomDetailPage() {
                     ))}
                 </div>
             </section>
+            {notification && (
+                <div className="toast-notification">
+                    <strong>{notification.title}</strong>
+                    <span>{notification.text}</span>
+                </div>
+            )}
         </section>
     );
 }

@@ -49,13 +49,13 @@ function BookingsPage() {
                 <div>
                     <p className="eyebrow">Личный кабинет</p>
                     <h1>Мои бронирования</h1>
-                    <p className="lead">Список бронирований текущего пользователя, полученный по JWT-токену.</p>
+                    <p className="lead">Здесь собраны ваши активные и отменённые бронирования.</p>
                 </div>
 
                 <div className="summary-card">
                     <CalendarCheck size={24} />
                     <strong>{bookings.length} записей</strong>
-                    <span>отображаются только бронирования авторизованного пользователя</span>
+                    <span>ваши поездки и проживание</span>
                 </div>
             </div>
 

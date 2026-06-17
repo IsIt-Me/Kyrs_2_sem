@@ -78,7 +78,7 @@ function ProfilePage() {
                 <div>
                     <p className="eyebrow">Личный кабинет</p>
                     <h1>Профиль пользователя</h1>
-                    <p className="lead">Данные текущего пользователя загружаются через JWT-защищённый endpoint.</p>
+                    <p className="lead">Управляйте контактными данными и информацией для бронирований.</p>
                 </div>
 
                 <div className="summary-card">

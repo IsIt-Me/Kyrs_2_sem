@@ -7,6 +7,13 @@ import { hotelApi } from '../api/hotelApi';
 function normalizeBoolean(value) {
     return value === true || value === 1;
 }
+function getImageUrl(imagePath) {
+    if (!imagePath) {
+        return '/media/categories/standard.jpg';
+    }
+
+    return `/media/${imagePath}`;
+}
 
 function FavoritesPage() {
     const queryClient = useQueryClient();
@@ -46,13 +53,13 @@ function FavoritesPage() {
                 <div>
                     <p className="eyebrow">Личный кабинет</p>
                     <h1>Избранные номера</h1>
-                    <p className="lead">Оптимистичное обновление удаляет номер из списка сразу после нажатия.</p>
+                    <p className="lead">Сохранённые номера, к которым можно быстро вернуться перед бронированием.</p>
                 </div>
 
                 <div className="summary-card">
                     <Heart size={24} />
                     <strong>{favorites.length} записей</strong>
-                    <span>избранное текущего пользователя по JWT-токену</span>
+                    <span>номера, которые вам понравились</span>
                 </div>
             </div>
 
@@ -76,12 +83,14 @@ function FavoritesPage() {
             <div className="favorite-grid">
                 {favorites.map((favorite) => (
                     <article className="favorite-card" key={favorite.id}>
-                        <div className="room-card-top">
-                            <span className="room-number">№ {favorite.room_number}</span>
-                            <span className={normalizeBoolean(favorite.is_available) ? 'status available' : 'status unavailable'}>
-                {normalizeBoolean(favorite.is_available) ? 'Доступен' : 'Недоступен'}
-              </span>
+                        <div className="favorite-image">
+                            <img src={getImageUrl(favorite.category_image)} alt={favorite.category_title} />
+                            <span className="hotel-room-number">№ {favorite.room_number}</span>
+                            <span className={normalizeBoolean(favorite.is_available) ? 'hotel-badge available' : 'hotel-badge unavailable'}>
+    {normalizeBoolean(favorite.is_available) ? 'Доступен' : 'Недоступен'}
+  </span>
                         </div>
+
 
                         <h2>{favorite.category_title}</h2>
                         <p>{favorite.description || 'Описание номера будет добавлено позже.'}</p>

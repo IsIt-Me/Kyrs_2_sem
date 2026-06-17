@@ -8,6 +8,8 @@ from channels.layers import get_channel_layer
 from . import sql
 
 class CategoryListAPIView(APIView):
+    permission_classes = (permissions.AllowAny,)
+
     def get(self, request):
         categories = sql.get_categories()
         return Response(categories)
@@ -37,6 +39,8 @@ class CategoryListAPIView(APIView):
 
 
 class CategoryDetailAPIView(APIView):
+    permission_classes = (permissions.AllowAny,)
+
     def get(self, request, category_id):
         category = sql.get_category_by_id(category_id)
 
@@ -91,6 +95,8 @@ class CategoryDetailAPIView(APIView):
 
 
 class RoomListAPIView(APIView):
+    permission_classes = (permissions.AllowAny,)
+
     def get(self, request):
         search = request.query_params.get('search')
         category_id = request.query_params.get('category')
@@ -146,6 +152,8 @@ class RoomListAPIView(APIView):
 
 
 class RoomDetailAPIView(APIView):
+    permission_classes = (permissions.AllowAny,)
+
     def get(self, request, room_id):
         room = sql.get_room_by_id(room_id)
 

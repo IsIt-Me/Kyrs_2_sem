@@ -1,12 +1,20 @@
-import { useEffect, useMemo, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { ArrowLeft, BedDouble, CalendarCheck, Heart, MessageSquare, Send, Users, Wifi, Wind } from 'lucide-react';
+import {useEffect, useMemo, useState} from 'react';
+import {Link, useParams} from 'react-router-dom';
+import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
+import {ArrowLeft, BedDouble, CalendarCheck, Heart, MessageSquare, Send, Users, Wifi, Wind} from 'lucide-react';
 
-import { hotelApi } from '../api/hotelApi';
+import {hotelApi} from '../api/hotelApi';
 
 function normalizeBoolean(value) {
     return value === true || value === 1;
+}
+
+function getImageUrl(imagePath) {
+    if (!imagePath) {
+        return '/media/categories/standard.jpg';
+    }
+
+    return `/media/${imagePath}`;
 }
 
 function getToday() {
@@ -14,7 +22,7 @@ function getToday() {
 }
 
 function RoomDetailPage() {
-    const { roomId } = useParams();
+    const {roomId} = useParams();
     const queryClient = useQueryClient();
 
     const [checkIn, setCheckIn] = useState(getToday());
@@ -67,7 +75,7 @@ function RoomDetailPage() {
     const bookingMutation = useMutation({
         mutationFn: hotelApi.createBooking,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['bookings'] });
+            queryClient.invalidateQueries({queryKey: ['bookings']});
             alert('Бронирование создано');
         },
         onError: (error) => {
@@ -92,7 +100,7 @@ function RoomDetailPage() {
     const favoriteMutation = useMutation({
         mutationFn: hotelApi.addFavorite,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['favorites'] });
+            queryClient.invalidateQueries({queryKey: ['favorites']});
             alert('Номер добавлен в избранное');
         },
         onError: (error) => {
@@ -143,37 +151,40 @@ function RoomDetailPage() {
     return (
         <section className="detail-page">
             <Link className="back-link" to="/">
-                <ArrowLeft size={18} />
+                <ArrowLeft size={18}/>
                 Назад к каталогу
             </Link>
 
             <div className="detail-layout">
                 <article className="detail-main">
-                    <div className="room-card-top">
-                        <span className="room-number">№ {room.room_number}</span>
-                        <span className={normalizeBoolean(room.is_available) ? 'status available' : 'status unavailable'}>
-              {normalizeBoolean(room.is_available) ? 'Доступен' : 'Недоступен'}
-            </span>
+                    <div className="detail-photo">
+                        <img src={getImageUrl(room.category_image)} alt={room.category_title}/>
+                        <div className="detail-photo-overlay"/>
+                        <span className={normalizeBoolean(room.is_available) ? 'hotel-badge available detail-photo-badge' : 'hotel-badge unavailable detail-photo-badge'}>
+  {normalizeBoolean(room.is_available) ? 'Доступен' : 'Недоступен'}
+</span>
+                        <div className="detail-photo-text">
+                            <span className="room-number">№ {room.room_number}</span>
+                            <h1>{room.category_title}</h1>
+                        </div>
                     </div>
-
-                    <h1>{room.category_title}</h1>
                     <p className="lead">{room.description || room.category_description}</p>
 
                     <div className="detail-stats">
             <span>
-              <Users size={18} />
+              <Users size={18}/>
               до {room.capacity} гостей
             </span>
                         <span>
-              <BedDouble size={18} />
+              <BedDouble size={18}/>
                             {room.floor} этаж
             </span>
                         <span>
-              <Wifi size={18} />
+              <Wifi size={18}/>
                             {normalizeBoolean(room.has_wifi) ? 'Wi-Fi' : 'Без Wi-Fi'}
             </span>
                         <span>
-              <Wind size={18} />
+              <Wind size={18}/>
                             {normalizeBoolean(room.has_ac) ? 'Кондиционер' : 'Без кондиционера'}
             </span>
                     </div>
@@ -188,26 +199,26 @@ function RoomDetailPage() {
                         type="button"
                         onClick={() => favoriteMutation.mutate(Number(roomId))}
                     >
-                        <Heart size={18} />
+                        <Heart size={18}/>
                         В избранное
                     </button>
                 </article>
 
                 <aside className="booking-panel">
                     <h2>
-                        <CalendarCheck size={22} />
+                        <CalendarCheck size={22}/>
                         Бронирование
                     </h2>
 
                     <form onSubmit={handleBookingSubmit}>
                         <label>
                             Заезд
-                            <input type="date" value={checkIn} onChange={(event) => setCheckIn(event.target.value)} />
+                            <input type="date" value={checkIn} onChange={(event) => setCheckIn(event.target.value)}/>
                         </label>
 
                         <label>
                             Выезд
-                            <input type="date" value={checkOut} onChange={(event) => setCheckOut(event.target.value)} />
+                            <input type="date" value={checkOut} onChange={(event) => setCheckOut(event.target.value)}/>
                         </label>
 
                         <button className="primary-button wide" type="submit" disabled={bookingMutation.isPending}>
@@ -223,7 +234,7 @@ function RoomDetailPage() {
                         <h2>Отзывы</h2>
                         <p>{reviews.length} отзывов, средняя оценка {averageRating}</p>
                     </div>
-                    <MessageSquare size={24} />
+                    <MessageSquare size={24}/>
                 </div>
 
                 <form className="review-form" onSubmit={handleReviewSubmit}>
@@ -242,7 +253,7 @@ function RoomDetailPage() {
                     />
 
                     <button className="primary-button" type="submit" disabled={reviewMutation.isPending}>
-                        <Send size={18} />
+                        <Send size={18}/>
                         Отправить
                     </button>
                 </form>
